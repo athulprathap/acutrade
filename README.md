@@ -1,2 +1,2 @@
 # acutrade
-Acutrade bot
+Acutrade bot is a crypto bot
