@@ -26,6 +26,7 @@ def getminutedata(symbol, interval, lookback):
         .tz_convert("Asia/Kolkata")
     )
     frame = frame.astype(float)
+    frame = frame.reset_index()
     return frame
 
 
@@ -101,15 +102,20 @@ def strategy(pair, qty, open_position=False):
         # print(order)
 
         buyprice = df.Close.iloc[-1]
+        buy_time = df.Time.iloc[-1]
 
-        f = open("myfile.txt", "a")
-
-        f.write("BUY : " + str(buyprice) + "\n")
-        f.close()
+        data = ["BUY",str(buyprice),str(buy_time)]
+        with open('trades.csv', 'a') as f_object:
+            
+            writer_object = writer(f_object)
+            writer_object.writerow(data)
+            f_object.close()
+            
+        open_position = True  # this will be used for our selling condition
+    
 
         # buyprice = float(order['fills'][0]['price']) #extracting buying price from the order, type cast to float because it's a string value
-        open_position = True  # this will be used for our selling condition
-
+        
         while open_position:
             sleep(0.5)  # to avoid acessive requests to the binance platform
             df = getminutedata(
@@ -124,17 +130,22 @@ def strategy(pair, qty, open_position=False):
             print(f"current Stop is " + str(buyprice * 0.995))  # 0.5% loss
 
             # target se current price bada hona chiya jitne pe humne kharida tha or agr stop loss se chota hua toh bech do
-            if df.Close[-1] <= buyprice * 0.995 or df.Close[-1] >= 1.005 * buyprice:
+            if df.Close.iloc[-1] <= buyprice * 0.995 or df.Close.iloc[-1] >= 1.005 * buyprice:
+                
                 # order = client.create_order(symbol=pair,
                 #                          side='SELL',
                 #                          type='MARKET',
                 #                          quantity=qty)
                 sp = df.Close.iloc[-1]
+                sell_time = df.Time.iloc[-1]
 
-                f = open("myfile.txt", "a")
 
-                f.write("SELL : " + str(sp) + "\n")
-                f.close()
+                data = ["SELL",str(sp),str(sell_time)]
+                
+                with open('trades.csv', 'a') as f_object:
+                    writer_object = writer(f_object)
+                    writer_object.writerow(data)
+                    f_object.close()
                 # print(order)
                 # added comment
                 break
