@@ -5,6 +5,7 @@ from binance.websockets import BinanceSocketManager
 import ta
 import numpy as np
 from time import sleep
+from csv import writer
 
 api_key = "UOVRq8pnF00jk4gbgMshASlPV4rCECjfcykkc8WYT3Z0ETefal3248ZwWsLnRAf4"
 api_secret = "zA3fnlCjEaNpYDCEOW21iLWPdG2QeiyKuOoLm5dANraUTh5tErYkBJ5MyQ8UaWX6"
