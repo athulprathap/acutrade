@@ -5,7 +5,7 @@ from binance.websockets import BinanceSocketManager
 import ta
 import numpy as np
 from time import sleep
-
+from csv import writer
 api_key = "UOVRq8pnF00jk4gbgMshASlPV4rCECjfcykkc8WYT3Z0ETefal3248ZwWsLnRAf4"
 api_secret = "zA3fnlCjEaNpYDCEOW21iLWPdG2QeiyKuOoLm5dANraUTh5tErYkBJ5MyQ8UaWX6"
 
@@ -105,7 +105,7 @@ def strategy(pair, qty, open_position=False):
         buy_time = df.Time.iloc[-1]
 
         data = ["BUY",str(buyprice),str(buy_time)]
-        with open('trades.csv', 'a') as f_object:
+        with open('/home/aryan/acutrade/macd/trades.csv', 'a') as f_object:
             
             writer_object = writer(f_object)
             writer_object.writerow(data)
@@ -142,7 +142,7 @@ def strategy(pair, qty, open_position=False):
 
                 data = ["SELL",str(sp),str(sell_time)]
                 
-                with open('trades.csv', 'a') as f_object:
+                with open('/home/aryan/acutrade/macd/trades.csv', 'a') as f_object:
                     writer_object = writer(f_object)
                     writer_object.writerow(data)
                     f_object.close()
@@ -158,9 +158,4 @@ if __name__ == "__main__":
         sleep(0.5)
 
 
-if __name__ == "__main__":
-
-    while True:
-        strategy("BTCUSDT", 10)  # 10 tokens
-        sleep(0.5)
 
